@@ -20,11 +20,28 @@ Enter:
 Your choice:"""
 
 def menu():
-    userInput = input(USER_CHOICE)
-    while userInput != "q":
-        pass
+    while True:
+        user_input = input(USER_CHOICE)
+        if user_input == "q":
+            quit()
+        if user_input == "a":
+            continue
+        elif user_input == "l":
+            continue
+        elif user_input == "r":
+            continue
+        elif user_input == "d":
+            continue
+        else:
+            print("""
+            
+            Please enter a valid option.
+            """)
+            continue
 
 # def promptAddBook() ask for a name and author and add the book to the list
 # def listBooks() show all books in the list
 # def promptReadBook() ask for book name and change it to "read"
 # def promptDeleteBook() ask for book name and remove it from the list
+
+menu()
