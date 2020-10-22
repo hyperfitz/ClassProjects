@@ -4,10 +4,57 @@ purpose of keeping track of what books I have and which of them I've already rea
 
 This project was started on October 20, 2020.
 
-As of 10/20/2020 I am still working on this project. (That is a silly thing to say at the moment.) :-)
+As of 10/21/2020 I am still working on this project.
 """
 
 from BooksDatabaseProgram.utils import database
+
+
+def promptAddBook():        # ask for a name and author and add the book to the list
+    name = input("Enter the book title: ").title()
+    author = input("Enter the author: ").title()
+    database.addBook(name, author)
+
+
+def listBooks():            # show all books in the list
+    for n in database.books:
+        if n["read"] == False:
+            print(f"""Book: "{n["name"]}" written by "{n["author"]}" has not yet been read.""")
+        else:
+            print(f"""Book: "{n["name"]}" written by "{n["author"]}" has been read.""")
+
+def promptReadBook():      # ask for book name and change it to "read"
+    book_name = input("Enter the title you read: ").title()
+    message = f"""The "{book_name}" name does not exist in the database."""
+    for n in database.books:
+        if book_name == n["name"]:
+            n["read"] = True
+            message = f"""The book "{book_name}" has been changed to read."""
+        else:
+            pass
+    print(message)
+
+
+# def promptDeleteBook()    # ask for book name and remove it from the list
+
+
+def menu():
+    while True:
+        user_input = input(USER_CHOICE)
+        if user_input == "q":
+            quit()
+        elif user_input == "a":
+            promptAddBook()
+        elif user_input == "l":
+            listBooks()
+        elif user_input == "r":
+            promptReadBook()
+        elif user_input == "d":
+            continue
+        else:
+            print("\n\nPlease enter a valid option.")
+            continue
+
 
 USER_CHOICE = """
 Enter:
@@ -18,30 +65,5 @@ Enter:
 - "q" to quit
 
 Your choice:"""
-
-def menu():
-    while True:
-        user_input = input(USER_CHOICE)
-        if user_input == "q":
-            quit()
-        if user_input == "a":
-            continue
-        elif user_input == "l":
-            continue
-        elif user_input == "r":
-            continue
-        elif user_input == "d":
-            continue
-        else:
-            print("""
-            
-            Please enter a valid option.
-            """)
-            continue
-
-# def promptAddBook() ask for a name and author and add the book to the list
-# def listBooks() show all books in the list
-# def promptReadBook() ask for book name and change it to "read"
-# def promptDeleteBook() ask for book name and remove it from the list
 
 menu()
