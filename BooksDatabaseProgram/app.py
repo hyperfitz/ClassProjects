@@ -4,7 +4,7 @@ purpose of keeping track of what books I have and which of them I've already rea
 
 This project was started on October 20, 2020.
 
-As of 10/22/2020 I am still working on this project.
+As of 10/23/2020 I am still working on this project.
 """
 
 import json
@@ -36,10 +36,18 @@ def promptReadBook():      # ask for book name and change it to "read"
             message = f"""The book "{book_name}" has been changed to read."""
         else:
             pass
+    data_books = open("utils/books.txt", "w")
+    json.dump(database.books, data_books)
+    data_books.close()
     print(message)
 
 
-# def promptDeleteBook()    # ask for book name and remove it from the list
+def promptDeleteBook():    # ask for book name and remove it from the list
+    user_input = input("Enter book title to remove from the list: ").title()
+    database.books = [book for book in database.books if book["name"] != user_input]
+    data_books = open("utils/books.txt", "w")
+    json.dump(database.books, data_books)
+    data_books.close()
 
 
 def menu():
@@ -50,9 +58,6 @@ def menu():
         data = open("utils/books.txt", "w")
         data.write("[]")
         data.close()
-#        data = open("books.txt", "r")
-#        database.books = json.load(data)
-#        data.close()
     finally:
         data = open("utils/books.txt", "r")
         database.books = json.load(data)
@@ -68,7 +73,7 @@ def menu():
         elif user_input == "r":
             promptReadBook()
         elif user_input == "d":
-            continue
+            promptDeleteBook()
         else:
             print("\n\nPlease enter a valid option.")
             continue
