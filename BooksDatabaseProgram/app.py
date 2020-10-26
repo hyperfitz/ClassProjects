@@ -4,51 +4,11 @@ purpose of keeping track of what books I have and which of them I've already rea
 
 This project was started on October 20, 2020.
 
-As of 10/23/2020 I am still working on this project.
+As of 10/26/2020 I am still working on this project.
 """
 
 import json
 from BooksDatabaseProgram.utils import database
-
-
-def promptAddBook():        # ask for a name and author and add the book to the list
-    name = input("Enter the book title: ").title()
-    author = input("Enter the author: ").title()
-    database.addBook(name, author)
-    data_books = open("utils/books.txt", "w")
-    json.dump(database.books, data_books)
-    data_books.close()
-
-
-def listBooks():            # show all books in the list
-    for n in database.books:
-        if n["read"] == "False":
-            print(f"""Book: "{n["name"]}" written by "{n["author"]}" has not yet been read.""")
-        else:
-            print(f"""Book: "{n["name"]}" written by "{n["author"]}" has been read.""")
-
-def promptReadBook():      # ask for book name and change it to "read"
-    book_name = input("Enter the title you read: ").title()
-    message = f"""The "{book_name}" name does not exist in the database."""
-    for n in database.books:
-        if book_name == n["name"]:
-            n["read"] = "True"
-            message = f"""The book "{book_name}" has been changed to read."""
-        else:
-            pass
-    data_books = open("utils/books.txt", "w")
-    json.dump(database.books, data_books)
-    data_books.close()
-    print(message)
-
-
-def promptDeleteBook():    # ask for book name and remove it from the list
-    user_input = input("Enter book title to remove from the list: ").title()
-    database.books = [book for book in database.books if book["name"] != user_input]
-    data_books = open("utils/books.txt", "w")
-    json.dump(database.books, data_books)
-    data_books.close()
-
 
 def menu():
     try:
@@ -67,13 +27,13 @@ def menu():
         if user_input == "q":
             quit()
         elif user_input == "a":
-            promptAddBook()
+            database.prompt_add_book()
         elif user_input == "l":
-            listBooks()
+            database.list_books()
         elif user_input == "r":
-            promptReadBook()
+            database.prompt_read_book()
         elif user_input == "d":
-            promptDeleteBook()
+            database.prompt_delete_book()
         else:
             print("\n\nPlease enter a valid option.")
             continue
