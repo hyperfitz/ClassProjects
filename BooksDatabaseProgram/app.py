@@ -4,7 +4,7 @@ purpose of keeping track of what books I have and which of them I've already rea
 
 This project was started on October 20, 2020.
 
-As of 10/26/2020 I am still working on this project.
+As of 10/27/2020 I am still working on this project.
 """
 
 import json
