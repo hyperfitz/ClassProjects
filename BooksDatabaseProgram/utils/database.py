@@ -22,9 +22,10 @@ def add_book(name, author):                                                     
     # cursor.execute(f"""INSERT INTO books VALUES("{name}", "{author}", 0)""")
     #
     # The above commented approach lends itself to an SQL injection attack :-O ... I'm going to not do it that way.
-
-    cursor.execute("INSERT INTO books VALUES( ?, ?, 0)", (name, author))    # This, I am told, is the safe way to do this.
-
+    try:
+        cursor.execute("INSERT INTO books VALUES( ?, ?, 0)", (name, author))    # This, I am instructed, is the safe way to do this.
+    except sqlite3.IntegrityError:
+        print(f"""The book "{name}" already exists in this list.""")
     connection.commit()
     connection.close()
 
@@ -36,30 +37,57 @@ def prompt_add_book():        # ask for a name and author and add the book to th
 
 
 def list_books():            # show all books in the list
-    for n in books:
-        if n["read"] == "False":
-            print(f"""Book: "{n["name"]}" written by "{n["author"]}" has not yet been read.""")
+    connection = sqlite3.connect("data.db")
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM books")
+
+    books = [{"name": row[0], "author": row[1], "read": row[2]} for row in cursor.fetchall()]
+    connection.close()
+
+    for book in books:
+        if book["read"] == False:
+            print(f"""Book: "{book["name"]}" written by "{book["author"]}" has not yet been read.""")
         else:
-            print(f"""Book: "{n["name"]}" written by "{n["author"]}" has been read.""")
+            print(f"""Book: "{book["name"]}" written by "{book["author"]}" has been read.""")
 
 
 def prompt_read_book():      # ask for book name and change it to "read"
     book_name = input("Enter the title you read: ").title()
-    message = f"""The "{book_name}" name does not exist in the database."""
-    for n in books:
-        if book_name == n["name"]:
-            n["read"] = "True"
+    message = f"""The book "{book_name}" name does not exist in the database."""
+
+    connection = sqlite3.connect("data.db")
+    cursor = connection.cursor()
+
+    cursor.execute("UPDATE books SET read = 1 WHERE name = ?", (book_name,))
+    cursor.execute("SELECT * FROM books")
+    books = [{"name": row[0], "author": row[1], "read": row[2]} for row in cursor.fetchall()]
+    for book in books:
+        if book_name == book["name"]:
             message = f"""The book "{book_name}" has been changed to read."""
         else:
             pass
-    with open("utils/books.txt", "w") as data_books:
-        json.dump(books, data_books)
+
+    connection.commit()
+    connection.close()
     print(message)
 
-
 def prompt_delete_book():    # ask for book name and remove it from the list
-    global books
-    user_input = input("Enter book title to remove from the list: ").title()
-    books = [book for book in books if book["name"] != user_input]
-    with open("utils/books.txt", "w") as data_books:
-        json.dump(books, data_books)
+    book_name = input("Enter the title you want to delete: ").title()
+    message = f"""The book "{book_name}" name does not exist in the database."""
+
+    connection = sqlite3.connect("data.db")
+    cursor = connection.cursor()
+
+    cursor.execute("DELETE FROM books WHERE name = ?", (book_name,))
+    cursor.execute("SELECT * FROM books")
+    books = [{"name": row[0], "author": row[1], "read": row[2]} for row in cursor.fetchall()]
+    for book in books:
+        if book_name == book["name"]:
+            message = f"""The book "{book_name}" has been deleted from the list."""
+        else:
+            pass
+
+    connection.commit()
+    connection.close()
+    print(message)

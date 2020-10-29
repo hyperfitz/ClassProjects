@@ -4,34 +4,10 @@ purpose of keeping track of what books I have and which of them I've already rea
 
 This project was started on October 20, 2020.
 
-As of 10/28/2020 I am still working on this project.
+I completed this project on 10/29/2020.
 """
 
-import json
 from BooksDatabaseProgram.utils import database
-
-def menu():
-    try:
-        data_test = open("data.db", "r")
-        data_test.close()
-    except FileNotFoundError:
-        database.create_book_table()
-    while True:
-        user_input = input(USER_CHOICE)
-        if user_input == "q":
-            quit()
-        elif user_input == "a":
-            database.prompt_add_book()
-        elif user_input == "l":
-            database.list_books()
-        elif user_input == "r":
-            database.prompt_read_book()
-        elif user_input == "d":
-            database.prompt_delete_book()
-        else:
-            print("\n\nPlease enter a valid option.")
-            continue
-
 
 USER_CHOICE = """
 Enter:
@@ -43,4 +19,26 @@ Enter:
 
 Your choice:"""
 
-menu()
+try:
+    data_test = open("data.db", "r")
+    data_test.close()
+except FileNotFoundError:
+    database.create_book_table()
+while True:
+    user_input = input(USER_CHOICE)
+    if user_input == "q":
+        quit()
+    elif user_input == "a":
+        database.prompt_add_book()
+    elif user_input == "l":
+        database.list_books()
+    elif user_input == "r":
+        database.prompt_read_book()
+    elif user_input == "d":
+        database.prompt_delete_book()
+    else:
+        print("\n\nPlease enter a valid option.")
+        continue
+
+
+
