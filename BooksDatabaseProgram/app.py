@@ -4,7 +4,7 @@ purpose of keeping track of what books I have and which of them I've already rea
 
 This project was started on October 20, 2020.
 
-As of 10/27/2020 I am still working on this project.
+As of 10/28/2020 I am still working on this project.
 """
 
 import json
@@ -12,16 +12,10 @@ from BooksDatabaseProgram.utils import database
 
 def menu():
     try:
-        data_test = open("utils/books.txt", "r")
+        data_test = open("data.db", "r")
         data_test.close()
     except FileNotFoundError:
-        data = open("utils/books.txt", "w")
-        data.write("[]")
-        data.close()
-    finally:
-        data = open("utils/books.txt", "r")
-        database.books = json.load(data)
-        data.close()
+        database.create_book_table()
     while True:
         user_input = input(USER_CHOICE)
         if user_input == "q":

@@ -1,20 +1,38 @@
 """
-For storing and retrieving books.
+This file is probably not named well; it is the data layer for this book list app.
 """
 
-import json
+import sqlite3
 
-books = []
 
-def add_book(name, author):
-    books.append({"name": name, "author": author, "read": "False"})
+def create_book_table():
+    connection = sqlite3.connect("data.db")
+    cursor = connection.cursor()
+
+    cursor.execute("CREATE TABLE books(name text primary key, author text, read integer)")  # It is worth noting that you can
+                                                                                            # use the "IF NOT EXISTS" command
+    connection.commit()                                                                     # here and it would negate
+    connection.close()                                                                      # the need for my exception
+                                                                                            # hanling approach in the app.py
+                                                                                            # file for checking if the database
+def add_book(name, author):                                                                 # already exists. I'm not going to
+    connection = sqlite3.connect("data.db")                                                 # bother; my the exception handling
+    cursor = connection.cursor()                                                            # approach is working fine.
+
+    # cursor.execute(f"""INSERT INTO books VALUES("{name}", "{author}", 0)""")
+    #
+    # The above commented approach lends itself to an SQL injection attack :-O ... I'm going to not do it that way.
+
+    cursor.execute("INSERT INTO books VALUES( ?, ?, 0)", (name, author))    # This, I am told, is the safe way to do this.
+
+    connection.commit()
+    connection.close()
+
 
 def prompt_add_book():        # ask for a name and author and add the book to the list
     name = input("Enter the book title: ").title()
     author = input("Enter the author: ").title()
     add_book(name, author)
-    with open("utils/books.txt", "w") as data_books:
-        json.dump(books, data_books)
 
 
 def list_books():            # show all books in the list
