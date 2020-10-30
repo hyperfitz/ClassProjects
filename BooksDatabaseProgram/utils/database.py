@@ -79,7 +79,6 @@ def prompt_delete_book():    # ask for book name and remove it from the list
     connection = sqlite3.connect("data.db")
     cursor = connection.cursor()
 
-    cursor.execute("DELETE FROM books WHERE name = ?", (book_name,))
     cursor.execute("SELECT * FROM books")
     books = [{"name": row[0], "author": row[1], "read": row[2]} for row in cursor.fetchall()]
     for book in books:
@@ -87,6 +86,7 @@ def prompt_delete_book():    # ask for book name and remove it from the list
             message = f"""The book "{book_name}" has been deleted from the list."""
         else:
             pass
+    cursor.execute("DELETE FROM books WHERE name = ?", (book_name,))
 
     connection.commit()
     connection.close()

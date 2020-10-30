@@ -1,10 +1,10 @@
 """
 This program is a database program for storing books which can be marked as read or not read for the
-purpose of keeping track of what books I have and which of them I've already read.
+purpose of keeping track of what books I have and which of them I've read.
 
 This project was started on October 20, 2020.
 
-I completed this project on 10/29/2020.
+I completed this project on October 30, 2020.
 """
 
 from BooksDatabaseProgram.utils import database
@@ -17,7 +17,7 @@ Enter:
 - "d" to delete a book
 - "q" to quit
 
-Your choice:"""
+Your choice: """
 
 try:
     data_test = open("data.db", "r")
