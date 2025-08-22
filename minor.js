@@ -61,3 +61,5 @@ setTimeout(() => {
     sendMessage(produceMessage("MESSAGE", "Hello from miner!"));
     
 }, 5000);
+
+process.on("uncaughtException", err => console.log(err));

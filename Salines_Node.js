@@ -58,3 +58,5 @@ setTimeout(() => {
     sendMessage(produceMessage("MESSAGE", "Hello from Saline!"));
     
 }, 15000);
+
+process.on("uncaughtException", err => console.log(err));
